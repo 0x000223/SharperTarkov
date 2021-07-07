@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31424.327
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharperTarkov", "SharperTarkov\SharperTarkov.csproj", "{4E047AAA-AC11-4903-9B7C-1EACE3B561EE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{27A6735E-8EC7-426D-9DEA-ECA3EEF96F39}"
+	ProjectSection(SolutionItems) = preProject
+		Dependencies\Mono.Simd.dll = Dependencies\Mono.Simd.dll
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4E047AAA-AC11-4903-9B7C-1EACE3B561EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E047AAA-AC11-4903-9B7C-1EACE3B561EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E047AAA-AC11-4903-9B7C-1EACE3B561EE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4E047AAA-AC11-4903-9B7C-1EACE3B561EE}.Debug|x64.Build.0 = Debug|Any CPU
+		{4E047AAA-AC11-4903-9B7C-1EACE3B561EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E047AAA-AC11-4903-9B7C-1EACE3B561EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E047AAA-AC11-4903-9B7C-1EACE3B561EE}.Release|x64.ActiveCfg = Release|x64
+		{4E047AAA-AC11-4903-9B7C-1EACE3B561EE}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D3DA787B-9F92-4082-B7A7-DBEE9E9F962E}
+	EndGlobalSection
+EndGlobal

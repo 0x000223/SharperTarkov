@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net5.0-windows</TargetFramework>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<UseWindowsForms>true</UseWindowsForms>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<PlatformTarget>x64</PlatformTarget>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Reference Include="Mono.Simd">
+			<HintPath>..\Dependencies\Mono.Simd.dll</HintPath>
+		</Reference>
+		<Reference Include="SharpDX">
+			<HintPath>..\..\SharpRender\bin\x64\Debug\net48\SharpDX.dll</HintPath>
+		</Reference>
+		<Reference Include="SharpDX.Desktop">
+			<HintPath>..\..\SharpRender\bin\x64\Debug\net48\SharpDX.Desktop.dll</HintPath>
+		</Reference>
+		<Reference Include="SharpDX.Direct2D1">
+			<HintPath>..\..\SharpRender\bin\x64\Debug\net48\SharpDX.Direct2D1.dll</HintPath>
+		</Reference>
+		<Reference Include="SharpDX.DXGI">
+			<HintPath>..\..\SharpRender\bin\x64\Debug\net48\SharpDX.DXGI.dll</HintPath>
+		</Reference>
+		<Reference Include="SharpDX.Mathematics">
+			<HintPath>..\..\SharpRender\bin\x64\Debug\net48\SharpDX.Mathematics.dll</HintPath>
+		</Reference>
+		<Reference Include="SharpMemory">
+			<HintPath>..\..\SharpMemory\bin\x64\Debug\netstandard2.0\SharpMemory.dll</HintPath>
+		</Reference>
+		<Reference Include="SharpMemory.Ioctl">
+			<HintPath>..\..\SharpMemory\bin\x64\Debug\netstandard2.0\SharpMemory.Ioctl.dll</HintPath>
+		</Reference>
+		<Reference Include="SharpRender">
+			<HintPath>..\..\SharpRender\bin\x64\Debug\net48\SharpRender.dll</HintPath>
+		</Reference>
+		<Reference Include="SharpRender.Direct2D">
+		  <HintPath>..\..\SharpRender\bin\x64\Release\net48\SharpRender.Direct2D.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+</Project>
