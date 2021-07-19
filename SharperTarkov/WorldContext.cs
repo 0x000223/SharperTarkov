@@ -24,6 +24,39 @@ namespace SharperTarkov
                 IsActive = true;
 
                 UpdateTask = Task.Run(Update);
+                var updatePlayersTask = Task.Run(async () =>
+                {
+                    while (IsActive)
+                    {
+                        try
+                        {
+                            var players = GetPlayers();
+
+                            if (players.Count != _players.Count && players.Any())
+                            {
+                                Interlocked.Exchange(ref _players, players);
+
+                                Interlocked.Exchange(ref _local, players.First(player => player.IsLocalPlayer));
+
+                                Trace.WriteLine($"[{DateTime.Now}] updatePlayerTask : Updated players, count = {players.Count}");
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Trace.WriteLine($"[{DateTime.Now}] WorldContext.Initialize : {e.Message}");
+                        }
+                        finally
+                        {
+                            foreach (var player in _players)
+                            {
+                                player.Update();
+                            }
+                        }
+
+                        await Task.Delay(TimeSpan.FromSeconds(1));
+                    }
+                });
+
             };
 
             StateContext.Instance.ExitRaid += (sender, e) => IsActive = false;
