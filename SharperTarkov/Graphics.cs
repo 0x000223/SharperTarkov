@@ -190,8 +190,29 @@ namespace SharperTarkov
                 }
             }
             catch (Exception)
+        private void RenderGrenades()
+        {
+            if (!WorldContext.IsActive)
             {
                 Thread.Sleep(TimeSpan.FromSeconds(2));
+                return;
+            }
+
+            foreach (var grenade in WorldContext.Grenades)
+            {
+                var pos3 = grenade.Position;
+                var pos2 = WorldContext.WorldToScreen(pos3);
+
+                if (pos2 == Vector2.Zero || pos3 == Vector3.Zero)
+                {
+                    continue;
+                }
+
+                var distance = Vector3.Distance(pos3, WorldContext.LocalPlayer.Body[EBone.Pelvis]);
+
+                var brush = grenade.Template.GrenadeType == EThrowWeaponType.Frag ? Brushes[Color.Red] : Brushes[Color.YellowGreen];
+
+                DrawTextOutlined($"[{grenade.Template.GrenadeType}][{distance:F0}m]", Fonts["debug"], pos2.X, pos2.Y, brush);
             }
         }
 
