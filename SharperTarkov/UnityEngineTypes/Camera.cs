@@ -17,17 +17,12 @@ namespace SharperTarkov.UnityEngineTypes
         {
             var viewMatrix = Matrix4x4.Transpose(ViewMatrix);
 
-            var translationVector = new Vector3(viewMatrix.M41, viewMatrix.M42, viewMatrix.M43);
-
-            var up = new Vector3(viewMatrix.M21, viewMatrix.M22, viewMatrix.M23);
-            var right = new Vector3(viewMatrix.M11, viewMatrix.M12, viewMatrix.M13);
-
             var w = viewMatrix.M41 * origin.X +
                     viewMatrix.M42 * origin.Y +
                     viewMatrix.M43 * origin.Z +
                     viewMatrix.M44;
             
-            if (w < 0.1f)
+            if (w < 0.098f)
                 return Vector2.Zero;
 
             var x = viewMatrix.M11 * origin.X +
@@ -42,8 +37,8 @@ namespace SharperTarkov.UnityEngineTypes
             
             return new Vector2
             {
-                X = (1920 / 2f) * (1f + x / w),
-                Y = (1080 / 2f) * (1f - y / w)
+                X = (ViewportX / 2f) * (1.0095f + x / w),
+                Y = (ViewportY / 2f) * (0.98f - y / w)
             };
         }
 
