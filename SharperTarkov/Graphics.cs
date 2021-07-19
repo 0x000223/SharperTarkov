@@ -29,6 +29,8 @@ namespace SharperTarkov
     {
         private readonly Stopwatch _stopwatch;
 
+        private readonly ParallelOptions _parallelOptions;
+
         public Graphics(Form form)
         {
             Form = form;
@@ -43,6 +45,11 @@ namespace SharperTarkov
             };
 
             _stopwatch = new Stopwatch();
+
+            _parallelOptions = new ParallelOptions
+            {
+                MaxDegreeOfParallelism = 3
+            };
         }
 
         public Form Form { get; }
