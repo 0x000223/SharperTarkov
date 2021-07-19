@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Linq;
+using System.Runtime.Intrinsics;
 using System.Collections.Generic;
 
 using SharpMemory.Ioctl;
@@ -66,19 +67,28 @@ namespace SharperTarkov
             return ret;
         }
 
-        public static List<T> ReadArray<T>(ulong address, uint typeSize) where T : struct
+        public static List<T> ReadList<T>(ulong address) where T : class
         {
-            var arrayClass = Memory.Read<ulong>(address);
+            var listClass = Memory.Read<ulong>(address);
 
-            var count = Memory.Read<int>(arrayClass + Offsets.Array.Count);
+            var count = Memory.Read<int>(listClass + Offsets.List.Size);
+
+            var array = Memory.Read<ulong>(listClass + Offsets.List.Array);
 
             var ret = new List<T>();
 
             for (uint index = 0; index < count; index++)
             {
-                var entry = Memory.Read<T>(arrayClass + Offsets.Array.Base + index * typeSize);
+                var objectAddress = Memory.Read<ulong>(array + Offsets.Array.Base + index * 0x8);
 
-                ret.Add(entry);
+                if (objectAddress == 0)
+                {
+                    continue;
+                }
+
+                var objectInstance = (T)Activator.CreateInstance(typeof(T), objectAddress);
+
+                ret.Add(objectInstance);
             }
 
             return ret;
