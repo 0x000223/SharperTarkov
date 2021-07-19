@@ -83,6 +83,9 @@ namespace SharperTarkov
             return new(new SharpDX.DirectWrite.Factory(SharpDX.DirectWrite.FactoryType.Shared), fontFamilyName, fontSize);
         }
 
+        private void DrawTextOutlined(string text, TextFormat textFormat, float x, float y, Brush brush)
+            => RenderTarget.DrawTextOutlined(text, textFormat, x, y, brush, Brushes[Color.Black]);
+
         private void KeyEventHandler()
         {
             if ((GetAsyncKeyState(Keys.F1) & 0x01) != 0)
