@@ -113,6 +113,38 @@ namespace SharperTarkov
                     }
                 });
 
+                var updateGrenadesTask = Task.Run(async () =>
+                {
+                    while (IsActive)
+                    {
+                        var grenades = GetGrenades();
+
+                        if (grenades.Count != Grenades.Count)
+                        {
+                            lock (Grenades)
+                            {
+                                Grenades = grenades;
+                            }
+                        }
+
+                        await Task.Delay(100);
+                    }
+                });
+
+                var scriptsTask = Task.Run(async () =>
+                {
+                    while (IsActive)
+                    {
+                        if (Settings.Default.IsRecoil)
+                        {
+                            Scripts.LightNoRecoil();
+                        }
+
+                        Scripts.FillStamina();
+
+                        await Task.Delay(500);
+                    }
+                });
             };
 
             StateContext.Instance.ExitRaid += (sender, e) => IsActive = false;
