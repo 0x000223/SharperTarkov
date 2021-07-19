@@ -166,12 +166,25 @@ namespace SharperTarkov
 
         public static Vector2 WorldToScreen(Vector3 origin) => MainCamera.WorldToScreen(origin);
 
+        public static ulong GetGameWorld()
         {
-            while (IsActive)
+            try
             {
-                UpdatePlayers();
+                var gameObject = GameObject.GetActiveObjectByName("GameWorld");
 
-                Thread.Sleep(TimeSpan.FromSeconds(0.5));
+                if (gameObject is null)
+                {
+                    return 0;
+                }
+
+                return gameObject.GetComponentByName("GameWorld").ScriptingClass;
+                
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine($"[{DateTime.Now}] WorldContext.GetGameWorld() : {e.Message}");
+
+                return 0;
             }
         }
 
@@ -189,7 +202,6 @@ namespace SharperTarkov
         }
 
 
-        public static GameWorld GetActiveGameWorld()
         {
             try
             {
