@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Numerics;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 using SharpDX;
 using SharpDX.DXGI;
@@ -12,16 +11,15 @@ using SharpDX.Windows;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 
-using SharpRender;
 using SharpRender.Direct2D;
+using SharperTarkov.ScriptingTypes;
 
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 using Factory = SharpDX.Direct2D1.Factory;
 using AlphaMode = SharpDX.Direct2D1.AlphaMode;
 using FactoryType = SharpDX.Direct2D1.FactoryType;
-
-using SharperTarkov.ScriptingTypes;
+using Settings = SharperTarkov.Properties.Settings;
 
 namespace SharperTarkov
 {
@@ -34,6 +32,8 @@ namespace SharperTarkov
         public Graphics(Form form)
         {
             Form = form;
+
+            FormCenter = new Vector2(Form.Width / 2f, Form.Height / 2f);
 
             RenderTarget = CreateRenderTarget(form);
 
@@ -52,7 +52,9 @@ namespace SharperTarkov
             };
         }
 
-        public Form Form { get; }
+        public static Form Form { get; private set; }
+
+        public static Vector2 FormCenter { get; private set; }
 
         public int FrameRate { get; private set; }
 
@@ -299,5 +301,13 @@ namespace SharperTarkov
                 frameCounter++;
             });
         }
+
+        #region Imports
+
+        [DllImport("user32.dll")]
+        public static extern ushort GetAsyncKeyState(Keys key);
+
+        #endregion
     }
 }
+ 
