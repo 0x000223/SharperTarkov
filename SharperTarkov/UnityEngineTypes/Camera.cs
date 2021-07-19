@@ -12,7 +12,21 @@ namespace SharperTarkov.UnityEngineTypes
 
         public Camera(ulong address) : base(address)
         {
+            ViewportX = Graphics.Form.Width;
+            ViewportY = Graphics.Form.Height;
+
+            AspectRatio = Memory.Read<float>(address + Offsets.Camera.Aspect);
+
+            Fov = Memory.Read<float>(address + Offsets.Camera.Fov);
         }
+
+        public float ViewportX { get; }
+
+        public float ViewportY { get; }
+
+        public float AspectRatio { get; }
+
+        public float Fov { get; }
 
         public Matrix4x4 ViewMatrix => Memory.Read<Matrix4x4>(Address + Offsets.Camera.ViewMatrix);
 
