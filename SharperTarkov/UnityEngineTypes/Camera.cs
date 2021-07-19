@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Numerics;
+
 using SharpMemory.Ioctl;
 
 namespace SharperTarkov.UnityEngineTypes
 {
     public class Camera : Component
     {
+        public Camera() { }
+
         public Camera(ulong address) : base(address)
         {
         }
