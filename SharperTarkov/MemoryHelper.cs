@@ -123,6 +123,21 @@ namespace SharperTarkov
                 var objectInstance = (T)Activator.CreateInstance(typeof(T), objectAddress);
 
                 ret.Add(objectInstance);
+        public static List<Vector128<float>> ReadVertices128(ulong address, int count)
+        {
+            var ret = new List<Vector128<float>>();
+
+            var buffer = Memory.ReadBytes(address, count * 16);
+
+            for (var i = 0; i < count * 16; i += 16)
+            {
+                var result = Vector128.Create(
+                    buffer[i], buffer[i + 1], buffer[i + 2], buffer[i + 3], buffer[i + 4], buffer[i + 5],
+                    buffer[i + 6], buffer[i + 7], buffer[i + 8], buffer[i + 9], buffer[i + 10], buffer[i + 11],
+                    buffer[i + 12], buffer[i + 13], buffer[i + 14], buffer[i + 15])
+                    .AsSingle();
+
+                ret.Add(result);
             }
 
             return ret;
