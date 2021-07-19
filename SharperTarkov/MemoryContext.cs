@@ -28,7 +28,7 @@ namespace SharperTarkov
 
         public static void Initialize()
         {
-            Memory.Initialize(new CommunicationToken(@"\\.\MemoryUtility", 0x00223322));
+            Memory.Initialize(new CommunicationToken(@"\\.\GenericIOCTL", 0x00222233));
 
             if(Memory.AttachToProcess("EscapeFromTarkov"))
             {
