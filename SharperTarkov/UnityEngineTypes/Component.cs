@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using SharpMemory.Ioctl;
 
 namespace SharperTarkov.UnityEngineTypes
@@ -23,5 +24,21 @@ namespace SharperTarkov.UnityEngineTypes
         public string Namespace { get; }
 
         public ulong ScriptingClass { get; }
+
+        public Transform GetTransform()
+        {
+            var gameObject = new GameObject(Memory.Read<ulong>(Address + Offsets.Component.GameObject));
+
+            try
+            {
+                var component = gameObject.GetComponents().First();
+
+                return new Transform(component.Address);
+            }
+            catch
+            {
+                return new Transform();
+            }
+        }
     }
 }
