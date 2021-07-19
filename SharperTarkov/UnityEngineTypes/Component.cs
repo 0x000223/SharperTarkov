@@ -5,6 +5,8 @@ namespace SharperTarkov.UnityEngineTypes
 {
     public class Component : Object
     {
+        public Component() { }
+
         public Component(ulong address) : base(address)
         {
             ScriptingClass = Memory.Read<ulong>(Address + Offsets.Component.ScriptingClass);
