@@ -83,6 +83,55 @@ namespace SharperTarkov
             return new(new SharpDX.DirectWrite.Factory(SharpDX.DirectWrite.FactoryType.Shared), fontFamilyName, fontSize);
         }
 
+        private void KeyEventHandler()
+        {
+            if ((GetAsyncKeyState(Keys.F1) & 0x01) != 0)
+            {
+                Settings.Default.IsRecoil = !Settings.Default.IsRecoil;
+                Settings.Default.Save();
+                return;
+            }
+
+            if ((GetAsyncKeyState(Keys.Left) & 0x01) != 0)
+            {
+                Scripts.ToggleNightVision();
+                return;
+            }
+
+            if ((GetAsyncKeyState(Keys.Down) & 0x01) != 0)
+            {
+                Settings.Default.RenderCorpses = !Settings.Default.RenderCorpses;
+                Settings.Default.Save();
+                return;
+            }
+
+            if ((GetAsyncKeyState(Keys.V) & 0x01) != 0)
+            {
+                Scripts.ToggleVisorEffect();
+                return;
+            }
+
+            if ((GetAsyncKeyState(Keys.F) & 0x8000) != 0)
+            {
+                RenderTarget.DrawCircle(Form.Width / 2f, Form.Height / 2f, Settings.Default.AimFov, Brushes[Color.Gainsboro], 0.5f);
+
+                try
+                {
+                    var target = Scripts.GetBestTarget(EBone.Head);
+
+                    var rotation = Scripts.CalculateRotation(target, EBone.Head);
+
+                    WorldContext.LocalPlayer.MovementContext.Rotation = rotation;
+                }
+                catch
+                {
+                    return;
+                }
+
+                Scripts.FullNoRecoil();
+            }
+        }
+
         private void RenderDebug()
         {
             RenderTarget.DrawTextOutlined($"frame rate: {FrameRate}", Fonts["debug"], Form.Left + 50f, Form.Top + 50f, Brushes[Color.Gray], Brushes[Color.Black]);
