@@ -218,6 +218,17 @@ namespace SharperTarkov
             }
         }
 
+        public static List<Grenade> GetGrenades()
+        {
+            try
+            {
+                var wrapperClass = Memory.Read<ulong>(ScriptingClass + Offsets.GameWorld.Grenades);
+
+                return MemoryHelper.ReadList<Grenade>(wrapperClass + 0x18);
+            }
+            catch
+            {
+                return new List<Grenade>();
             }
         }
     }
