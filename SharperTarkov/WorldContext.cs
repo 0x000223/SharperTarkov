@@ -73,6 +73,24 @@ namespace SharperTarkov
                     await Task.Delay(TimeSpan.FromMilliseconds(200));
                 });
 
+                var updateCorpsesTask = Task.Run(async () =>
+                {
+                    while (IsActive)
+                    {
+                        var corpses = GetCorpses();
+
+                        if (corpses.Count != Corpses.Count)
+                        {
+                            lock (Corpses)
+                            {
+                                Corpses = corpses;
+                            }
+                        }
+
+                        await Task.Delay(TimeSpan.FromSeconds(1));
+                    }
+                });
+
             };
 
             StateContext.Instance.ExitRaid += (sender, e) => IsActive = false;
