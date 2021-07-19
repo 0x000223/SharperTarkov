@@ -34,11 +34,16 @@ namespace SharperTarkov
         {
             var stringClass = Memory.Read<ulong>(address);
 
+            if (stringClass == 0)
+            {
+                return string.Empty;
+            }
+
             var length = Memory.Read<int>(stringClass + Offsets.String.Length);
 
-            return length == 0
-                ? default
-                : Memory.ReadUnicode(stringClass + Offsets.String.Start, length * 2);
+            return length > 0
+                ? Memory.ReadUnicode(stringClass + Offsets.String.Start, length * 2)
+                : string.Empty;
         }
 
         public static List<T> ReadArray<T>(ulong address) where T : class
