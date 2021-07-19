@@ -188,19 +188,19 @@ namespace SharperTarkov
             }
         }
 
-        private static void UpdatePlayers()
+        public static List<Player> GetPlayers()
         {
-            var players = GameWorld.GetPlayers();
-
-            if (players.Count != GameWorld.Players.Count)
+            try
             {
-                lock (GameWorld.Players)
-                {
-                    GameWorld.Players = players;
-                }
+                return MemoryHelper.ReadList<Player>(ScriptingClass + Offsets.GameWorld.RegisteredPlayers);
             }
-        }
+            catch(Exception e)
+            {
+                Trace.WriteLine($"[{DateTime.Now}] WorldContext.GetPlayers : {e.Message}");
+            }
 
+            return new List<Player>();
+        }
 
         {
             try
