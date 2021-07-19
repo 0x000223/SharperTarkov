@@ -1,29 +1,51 @@
 ﻿using System;
+using System.Linq;
 using System.Numerics;
-using System.Threading;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
+using SharpMemory.Ioctl;
 using SharperTarkov.ScriptingTypes;
 using SharperTarkov.UnityEngineTypes;
+
+using Settings = SharperTarkov.Properties.Settings;
 
 namespace SharperTarkov
 {
     public class WorldContext
     {
+        private static Player _local;
+
+        private static List<Player> _players;
+
         public static void Initialize()
         {
             StateContext.Instance.EnterRaid += (sender, e) =>
             {
                 do
                 {
-                    GameWorld = GetActiveGameWorld();
+                    ScriptingClass = GetGameWorld();
 
-                } while (GameWorld is null);
+                } while (ScriptingClass == 0);
+
+                do
+                {
+                    MainCamera = Camera.GetMainCamera();
+
+                } while (MainCamera.Address == 0);
+
+                _players = GetPlayers();
+
+                _local = _players.First();
+
+                Corpses = new List<Corpse>();
+
+                Grenades = new List<Grenade>();
 
                 IsActive = true;
 
-                UpdateTask = Task.Run(Update);
                 var updatePlayersTask = Task.Run(async () =>
                 {
                     while (IsActive)
@@ -96,13 +118,22 @@ namespace SharperTarkov
             StateContext.Instance.ExitRaid += (sender, e) => IsActive = false;
         }
 
-        public static Task UpdateTask { get; private set; }
+        public static ulong ScriptingClass { get; private set; }
 
         public static bool IsActive { get; private set; }
 
-        public static GameWorld GameWorld { get; private set; }
+        public static Camera MainCamera { get; private set; }
 
-        private static void Update()
+        public static Player LocalPlayer => _local;
+
+        public static List<Player> Players => _players;
+
+        public static List<Corpse> Corpses { get; private set; }
+
+        public static List<Grenade> Grenades { get; private set; }
+
+        public static Vector2 WorldToScreen(Vector3 origin) => MainCamera.WorldToScreen(origin);
+
         {
             while (IsActive)
             {
@@ -125,7 +156,6 @@ namespace SharperTarkov
             }
         }
 
-        public static Vector2 WorldToScreen(Vector3 origin) => GameWorld.MainCamera.WorldToScreen(origin);
 
         public static GameWorld GetActiveGameWorld()
         {
