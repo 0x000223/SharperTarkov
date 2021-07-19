@@ -209,13 +209,29 @@ namespace SharperTarkov
             });
         }
 
-
-                    RenderTarget.DrawTextOutlined(player.PlayerName, Fonts["debug"], pelvis2.X, pelvis2.Y, nameBrush, Brushes[Color.Black]);
-
-                    RenderTarget.DrawTextOutlined($"{player.Health:F0}HP[{distance:F0}m]", Fonts["debug"], pelvis2.X, pelvis2.Y + 15f, Brushes[Color.Cornsilk], Brushes[Color.Black]);
-                }
+        private void RenderCorpses()
+        {
+            if (!WorldContext.IsActive || !Properties.Settings.Default.RenderCorpses)
+            {
+                return;
             }
-            catch (Exception)
+
+            foreach (var corpse in WorldContext.Corpses)
+            {
+                var pos3 = corpse.Position;
+                var pos2 = WorldContext.WorldToScreen(pos3);
+
+                if (pos2 == Vector2.Zero || pos3 == Vector3.Zero)
+                {
+                    continue;
+                }
+
+                var distance = Vector3.Distance(pos3, WorldContext.LocalPlayer.Body[EBone.Pelvis]);
+
+                DrawTextOutlined($"[{corpse.PlayerSide}][{distance:F0}m]", Fonts["debug"], pos2.X, pos2.Y, Brushes[Color.DarkGray]);
+            }
+        }
+
         private void RenderGrenades()
         {
             if (!WorldContext.IsActive)
