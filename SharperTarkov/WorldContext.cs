@@ -202,25 +202,22 @@ namespace SharperTarkov
             return new List<Player>();
         }
 
+        public static List<Corpse> GetCorpses()
         {
             try
             {
-                var gameObject = GameObject.GetActiveObjectByName("GameWorld");
+                var wrapperClass = Memory.Read<ulong>(ScriptingClass + Offsets.GameWorld.LootItems);
 
-                if (gameObject is null)
-                {
-                    return default;
-                }
+                var lootItems = MemoryHelper.ReadList<LootItem>(wrapperClass + 0x18);
 
-                var adddress = gameObject.GetComponentByName("GameWorld").ScriptingClass;
-
-                return new GameWorld(adddress);
+                return lootItems.Where(item => item.ItemName.Equals("Corpse")).Select(item => new Corpse(item.Address)).ToList();
             }
-            catch (NullReferenceException e)
+            catch
             {
-                Trace.WriteLine($"> GetActiveGameWorld() - {e.StackTrace}");
+                return new List<Corpse>();
+            }
+        }
 
-                return null;
             }
         }
     }
