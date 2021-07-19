@@ -57,6 +57,22 @@ namespace SharperTarkov
                     }
                 });
 
+                var updateBonesTask = Task.Run(async () =>
+                {
+                    while (IsActive)
+                    {
+                        foreach (var player in _players)
+                        {
+                            for (var index = 0; index < player.Body.Transforms.Count; index++)
+                            {
+                                player.Body.Positions[index] = player.Body.Transforms[index].GetPosition();
+                            }
+                        }
+                    }
+
+                    await Task.Delay(TimeSpan.FromMilliseconds(200));
+                });
+
             };
 
             StateContext.Instance.ExitRaid += (sender, e) => IsActive = false;
