@@ -51,4 +51,21 @@ namespace SharperTarkov.ScriptingTypes
 
         Common
     }
+
+    public enum EThrowWeaponType
+    {
+        Frag,
+
+        Stun,
+
+        Smoke,
+
+        Gas,
+
+        Incendiary,
+
+        Sonar,
+
+        Flash
+    }
 }
