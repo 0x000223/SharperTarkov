@@ -84,30 +84,19 @@ namespace SharperTarkov
             return ret;
         }
 
-        public static List<T> ReadList<T>(ulong address) where T : class
+        public static List<T> ReadList<T>(ulong address, int[] indicies) where T : struct
         {
             var listClass = Memory.Read<ulong>(address);
-
-            var count = Memory.Read<int>(listClass + Offsets.List.Size);
 
             var array = Memory.Read<ulong>(listClass + Offsets.List.Array);
 
             var ret = new List<T>();
 
-            for (uint index = 0; index < count; index++)
+            foreach (var index in indicies)
             {
-                try
-                {
-                    var objectAddress = Memory.Read<ulong>(array + Offsets.Array.Base + index * 0x8);
+                var objectAddress = Memory.Read<T>(array + Offsets.Array.Base + (uint)index * 0x8);
 
-                    var objectInstance = (T)Activator.CreateInstance(typeof(T), objectAddress);
-
-                    ret.Add(objectInstance);
-                }
-                catch (Exception)
-                {
-                    return new List<T>();
-                }
+                ret.Add(objectAddress);
             }
 
             return ret;
