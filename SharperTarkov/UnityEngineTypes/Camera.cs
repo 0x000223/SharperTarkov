@@ -47,30 +47,21 @@ namespace SharperTarkov.UnityEngineTypes
             };
         }
 
-        public static GameObject GetMainCamera()
+        public static Camera GetMainCamera()
         {
-            return GameObject
-                .GetTaggedObjects()
-                .FirstOrDefault(o => o.Tag == 5);
-        }
-
-        public static Camera GetMainCameraComponent()
-        {
-            var mainCamera = GetMainCamera();
-
-            if (mainCamera == null)
+            try
             {
-                return null;
+                return GameObject.GetTaggedObjects()
+                    .First(@object => @object.Tag == 5)
+                    .GetComponents()
+                    .Where(component => component.Name.Equals("Camera") && component.Namespace.Equals("UnityEngine"))
+                    .Select(component => new Camera(component.Address))
+                    .First();
             }
-
-            var gameObject = mainCamera;
-
-            var address = gameObject
-                .GetComponents()
-                .First(c => c.Name.Contains("Camera"))
-                .Address;
-
-            return new Camera(address);
+            catch
+            {
+                return new Camera();
+            }
         }
     }
 }
