@@ -134,8 +134,18 @@ namespace SharperTarkov
 
         private void RenderDebug()
         {
-            RenderTarget.DrawTextOutlined($"frame rate: {FrameRate}", Fonts["debug"], Form.Left + 50f, Form.Top + 50f, Brushes[Color.Gray], Brushes[Color.Black]);
-            RenderTarget.DrawTextOutlined($"frame time: {FrameTime:F3}", Fonts["debug"], Form.Left + 50f, Form.Top + 65f, Brushes[Color.Gray], Brushes[Color.Black]);
+            if (!WorldContext.IsActive)
+            {
+                return;
+            }
+
+            var playerCount = WorldContext.Players.Count;
+            var rotation = WorldContext.LocalPlayer.MovementContext.Rotation;
+
+            DrawTextOutlined($"frame rate: {FrameRate}", Fonts["debug"], Form.Left + 50f, Form.Top + 50f, Brushes[Color.Gray]);
+            DrawTextOutlined($"frame time: {FrameTime:F3}", Fonts["debug"], Form.Left + 50f, Form.Top + 65f, Brushes[Color.Gray]);
+            DrawTextOutlined($"rotation: {rotation.X:F0}, {rotation.Y:F0}", Fonts["debug"], Form.Left + 50f, Form.Top + 80f, Brushes[Color.Gray]);
+            DrawTextOutlined($"entities: {playerCount}", Fonts["debug"], Form.Left + 50f, Form.Top + 95f, Brushes[Color.Gray]);
         }
 
         private void RenderPlayers()
