@@ -158,31 +158,57 @@ namespace SharperTarkov
                 return;
             }
 
-            try
+            Parallel.ForEach(WorldContext.Players, _parallelOptions, player =>
             {
-                var posLocal = WorldContext.GameWorld.LocalPlayer.PlayerBody[EBone.Pelvis].GetPosition();
-
-                foreach (var player in WorldContext.GameWorld.Players)
+                if (player.IsLocalPlayer)
                 {
-                    if (player == WorldContext.GameWorld.LocalPlayer)
+                    return;
+                }
+
+                var head3 = player.Body[EBone.Head];
+                var head2 = WorldContext.WorldToScreen(head3);
+
+                var pelvis3 = player.Body[EBone.Pelvis];
+                var pelvis2 = WorldContext.WorldToScreen(pelvis3);
+
+                if (head2 == Vector2.Zero)
+                {
+                    return;
+                }
+
+                var distance = Vector3.Distance(pelvis3, WorldContext.LocalPlayer.Body[EBone.Pelvis]);
+
+                var nameBrush = player.IsSavage ? Brushes[Color.DimGray] : Brushes[Color.Lime];
+
+                nameBrush = player.IsSavagePlayer ? Brushes[Color.Coral] : nameBrush;
+
+                RenderTarget.DrawTextOutlined(player.PlayerName, Fonts["debug"], pelvis2.X, pelvis2.Y, nameBrush, Brushes[Color.Black]);
+
+                RenderTarget.DrawTextOutlined($"{player.Health:F0}hp [{distance:F0}m] [Lvl {player.PlayerLevel}]", Fonts["debug"], pelvis2.X, pelvis2.Y + 15f, Brushes[Color.SlateGray], Brushes[Color.Black]);
+
+                #region Bones
+                for (var index = 0; index < PlayerBody.BoneLinkIndices.Length; index += 2)
+                {
+                    var index1 = PlayerBody.BoneLinkIndices[index];
+                    var index2 = PlayerBody.BoneLinkIndices[index + 1];
+
+                    var f3 = player.Body.Positions[index1];
+                    var f2 = WorldContext.WorldToScreen(f3);
+
+                    var t3 = player.Body.Positions[index2];
+                    var t2 = WorldContext.WorldToScreen(t3);
+
+                    if (f2 == Vector2.Zero || t2 == Vector2.Zero)
                     {
                         continue;
                     }
 
-                    var head3 = player.PlayerBody[EBone.Head].GetPosition();
-                    var head2 = WorldContext.WorldToScreen(head3);
+                    RenderTarget.DrawLine(f2.X, f2.Y, t2.X, t2.Y, Brushes[Color.Fuchsia]);
+                }
+                #endregion
+            });
+        }
 
-                    var pelvis3 = player.PlayerBody[EBone.Pelvis].GetPosition();
-                    var pelvis2 = WorldContext.WorldToScreen(pelvis3);
-
-                    if (head2 == Vector2.Zero)
-                    {
-                        continue;
-                    }
-
-                    var distance = Vector3.Distance(pelvis3, posLocal);
-
-                    var nameBrush = player.IsSavage ? Brushes[Color.WhiteSmoke] : Brushes[Color.Lime];
 
                     RenderTarget.DrawTextOutlined(player.PlayerName, Fonts["debug"], pelvis2.X, pelvis2.Y, nameBrush, Brushes[Color.Black]);
 
