@@ -236,7 +236,6 @@ namespace SharperTarkov
         {
             if (!WorldContext.IsActive)
             {
-                Thread.Sleep(TimeSpan.FromSeconds(2));
                 return;
             }
 
@@ -262,7 +261,7 @@ namespace SharperTarkov
         {
             var frameCounter = 0;
 
-            RenderLoop.Run(Form, () =>
+            RenderLoop.Run(Form, () => 
             {
                 if (!_stopwatch.IsRunning)
                 {
@@ -272,8 +271,10 @@ namespace SharperTarkov
                 RenderTarget.BeginDraw();
                 RenderTarget.Clear(null);
 
-                Parallel.Invoke(RenderDebug, RenderPlayers);
-
+                KeyEventHandler();
+                
+                Parallel.Invoke(RenderDebug, RenderPlayers, RenderCorpses, RenderGrenades);
+                
                 RenderTarget.Flush();
                 RenderTarget.EndDraw();
 
